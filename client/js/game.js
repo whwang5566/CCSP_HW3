@@ -36,13 +36,13 @@ var uiMenu;
 
 //socket
 var socket;
+//sync
+var SYNC_BOUND = 100;
+var needSync = false;
+var lastSyncTime;
 
 function initGame(){
-    //resize canvas
-    var canvas = document.getElementById("gameStage");
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-
+   
     //stage
     stage = new createjs.Stage("gameStage");
     
@@ -159,7 +159,6 @@ function initUIEvents(){
 }
 
 
-var needSync = false;
 //tick
 function handleTick() {
 
@@ -167,8 +166,12 @@ function handleTick() {
 
     //reset
     needSync = false;
+    //check sync time
+    var syncTimeDiff = createjs.Ticker.getTime() - lastSyncTime;
+
     //if moving
-    if(isMove) needSync = true;
+    if(isMove && (syncTimeDiff>SYNC_BOUND) ) needSync = true;
+    //if(isMove) needSync = true;
 
     //move and set animation
     if(moveUp === true){
@@ -308,9 +311,11 @@ function updatePlayer(id,stateData){
 
     if(stateData)
     {
-       player.x = stateData.x;
-       player.y = stateData.y;
-       if(player.currentAnimation != stateData.animation) player.gotoAndPlay(stateData.animation);
+        //smooth move 
+        createjs.Tween.get(player,{loop:false}).to({x:stateData.x,y:stateData.y},SYNC_BOUND);
+        //player.x = stateData.x;
+        //player.y = stateData.y;
+        if(player.currentAnimation != stateData.animation) player.gotoAndPlay(stateData.animation);
     }
 }
 
@@ -329,6 +334,9 @@ function initSocket(){
         console.log(data);
         //add new player
         addNewPlayer(data.id,512/2,250);
+
+        //send self player data to new client
+        sendPlayerStateToServer();
     });
 
     //other player connect
@@ -354,7 +362,10 @@ function sendPlayerStateToServer(){
         animation : mainPlayer.currentAnimation
     };
 
-    if(socket) socket.emit('clientStateChange', playerData);
+    if(socket){
+        socket.emit('clientStateChange', playerData);
+        lastSyncTime = createjs.Ticker.getTime();
+    }
 }
 
 
