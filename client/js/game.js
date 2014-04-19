@@ -321,7 +321,8 @@ function updatePlayer(id,stateData){
 
 //init socket
 function initSocket(){
-    socket = io.connect('http://localhost');
+    //socket = io.connect('http://localhost');
+    socket = io.connect('http://paradeonline.herokuapp.com');
 
     
     //self connect success and get all players data
