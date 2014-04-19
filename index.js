@@ -3,10 +3,11 @@ var express = require('express')
   	, server = require('http').createServer(app)
   	, io = require('socket.io').listen(server,{ log: false });
 
-var port = 5566;
+var port = Number(process.env.PORT || 5000);
 
 //static files
 app.use(express.static(__dirname+"/client/js"));
+app.use(express.static(__dirname+"/client/css"));
 app.use(express.static(__dirname+"/client/assets"));
 
 //server
