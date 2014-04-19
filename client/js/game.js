@@ -123,7 +123,7 @@ function initEnemy(){
 				regX:0, regY:0,
 				count:2,
 				width:103, height:81
-			}, images:["http://www.htmlgoodies.com/img/assets/yar.png"]
+			}, images:["yar.png"]
 		}
 	);
     
@@ -322,7 +322,7 @@ function updatePlayer(id,stateData){
 //init socket
 function initSocket(){
     //socket = io.connect('http://localhost');
-    socket = io.connect('http://paradeonline.herokuapp.com');
+    socket = io.connect('https://paradeonline.herokuapp.com');
 
     
     //self connect success and get all players data
