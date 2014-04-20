@@ -193,31 +193,30 @@ function handleTick() {
     
     //set idel animation
     if(isMove === false){
-        if((mainPlayer.currentAnimation == "up_walk") && (mainPlayer.currentAnimation != "up_idle"))
+        if((mainPlayer.currentAnimation === "up_walk") && (mainPlayer.currentAnimation != "up_idle"))
         {
             mainPlayer.gotoAndPlay("up_idle");
 
             needSync = true;
         } 
-        else if((mainPlayer.currentAnimation == "down_walk") && (mainPlayer.currentAnimation != "down_idle"))
+        else if((mainPlayer.currentAnimation === "down_walk") && (mainPlayer.currentAnimation != "down_idle"))
         {
             mainPlayer.gotoAndPlay("down_idle");
 
             needSync = true;
         } 
-        else if((mainPlayer.currentAnimation == "left_walk") && (mainPlayer.currentAnimation != "left_idle"))
+        else if((mainPlayer.currentAnimation === "left_walk") && (mainPlayer.currentAnimation != "left_idle"))
         {
             mainPlayer.gotoAndPlay("left_idle");
 
             needSync = true;
         } 
-        else if((mainPlayer.currentAnimation == "right_walk") && (mainPlayer.currentAnimation != "right_idle"))
+        else if((mainPlayer.currentAnimation === "right_walk") && (mainPlayer.currentAnimation != "right_idle"))
         {
             mainPlayer.gotoAndPlay("right_idle");
 
             needSync = true;
         } 
-        else mainPlayer.gotoAndPlay("down_idle");
     }
 
     //send to server
@@ -299,7 +298,7 @@ function removePlayer(id){
 
 //update player state
 function updatePlayer(id,stateData){
-
+    console.log('receive SYNC!');
     //add to list
     var player = playersList[id];
 
@@ -312,9 +311,9 @@ function updatePlayer(id,stateData){
     if(stateData)
     {
         //smooth move 
-        //createjs.Tween.get(player,{loop:false}).to({x:stateData.x,y:stateData.y},50);
-        player.x = stateData.x;
-        player.y = stateData.y;
+        createjs.Tween.get(player,{loop:false}).to({x:stateData.x,y:stateData.y});
+        //player.x = stateData.x;
+        //player.y = stateData.y;
         if(player.currentAnimation != stateData.animation) player.gotoAndPlay(stateData.animation);
     }
 }
