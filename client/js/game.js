@@ -312,9 +312,9 @@ function updatePlayer(id,stateData){
     if(stateData)
     {
         //smooth move 
-        createjs.Tween.get(player,{loop:false}).to({x:stateData.x,y:stateData.y},50);
-        //player.x = stateData.x;
-        //player.y = stateData.y;
+        //createjs.Tween.get(player,{loop:false}).to({x:stateData.x,y:stateData.y},50);
+        player.x = stateData.x;
+        player.y = stateData.y;
         if(player.currentAnimation != stateData.animation) player.gotoAndPlay(stateData.animation);
     }
 }
