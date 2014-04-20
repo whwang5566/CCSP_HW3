@@ -167,7 +167,7 @@ function handleTick() {
     //reset
     needSync = false;
     //check sync time
-    var syncTimeDiff = createjs.Ticker.getTime() - lastSyncTime;
+    //var syncTimeDiff = createjs.Ticker.getTime() - lastSyncTime;
 
     //if moving
     //if(isMove && (syncTimeDiff>SYNC_BOUND) ) needSync = true;
