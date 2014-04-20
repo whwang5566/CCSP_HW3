@@ -37,9 +37,9 @@ var uiMenu;
 //socket
 var socket;
 //sync
-var SYNC_BOUND = 100;
-var needSync = false;
-var lastSyncTime;
+// var SYNC_BOUND = 100;
+// var needSync = false;
+// var lastSyncTime;
 
 function initGame(){
    
@@ -170,8 +170,8 @@ function handleTick() {
     var syncTimeDiff = createjs.Ticker.getTime() - lastSyncTime;
 
     //if moving
-    if(isMove && (syncTimeDiff>SYNC_BOUND) ) needSync = true;
-    //if(isMove) needSync = true;
+    //if(isMove && (syncTimeDiff>SYNC_BOUND) ) needSync = true;
+    if(isMove) needSync = true;
 
     //move and set animation
     if(moveUp === true){
@@ -322,7 +322,7 @@ function updatePlayer(id,stateData){
 //init socket
 function initSocket(){
     //socket = io.connect('http://localhost');
-    socket = io.connect('https://paradeonline.herokuapp.com');
+    socket = io.connect('http://paradeonline.herokuapp.com');
 
     
     //self connect success and get all players data
@@ -365,7 +365,7 @@ function sendPlayerStateToServer(){
 
     if(socket){
         socket.emit('clientStateChange', playerData);
-        lastSyncTime = createjs.Ticker.getTime();
+        //lastSyncTime = createjs.Ticker.getTime();
     }
 }
 
