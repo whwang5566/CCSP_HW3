@@ -40,6 +40,7 @@ var socket;
 // var SYNC_BOUND = 100;
 // var needSync = false;
 // var lastSyncTime;
+var otherPlayerMoveTweenDelay = 100;
 
 function initGame(){
    
@@ -298,7 +299,7 @@ function removePlayer(id){
 
 //update player state
 function updatePlayer(id,stateData){
-    console.log('receive SYNC!');
+    
     //add to list
     var player = playersList[id];
 
@@ -310,12 +311,18 @@ function updatePlayer(id,stateData){
 
     if(stateData)
     {
+
         //smooth move 
-        createjs.Tween.get(player,{loop:false}).to({x:stateData.x,y:stateData.y});
+        createjs.Tween.get(player,{loop:false}).to({x:stateData.x,y:stateData.y},otherPlayerMoveTweenDelay);
         //player.x = stateData.x;
         //player.y = stateData.y;
         if(player.currentAnimation != stateData.animation) player.gotoAndPlay(stateData.animation);
+
+        //import! need update
+        stage.update();
+
     }
+
 }
 
 //init socket
