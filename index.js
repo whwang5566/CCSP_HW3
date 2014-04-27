@@ -1,43 +1,35 @@
 var express = require('express')
-	, app = express()
-  	, server = require('http').createServer(app)
-  	, io = require('socket.io').listen(server,{ log: false });
+  , controller = require('./controllers')
+	, app = express();
 
 var port = Number(process.env.PORT || 5000);
 
 //static files
-app.use(express.static(__dirname+"/client/js"));
-app.use(express.static(__dirname+"/client/css"));
-app.use(express.static(__dirname+"/client/assets"));
+app.use(express.static(__dirname+"/public"))
+   .use(express.bodyParser());
 
 //server
-server.listen(port);
+app.listen(port);
 
-//send game index.html
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/client/gameclient.html');
-});
+//set render engine
+app.set('view engine','ejs');
 
-io.sockets.on('connection', function (socket) {
+//root url
+app.get('/', controller.index);
 
-	//show all clients
-	//console.log(io.sockets.clients());
+//get all items
+app.get('/items', controller.getItems);
 
-	//connect success message and all players data
-  	socket.emit('clientConnect', { message: 'connect success!' });
+//add new items
+app.post('/items', controller.addItem);
 
-  	//broadcast(except current socket) to add player
-  	socket.broadcast.emit('newClientConnect', { id:socket.id,message: 'new client connect!' });
+//update item state
+app.put('/items/:id', controller.updateItem);
 
-  	socket.on('clientStateChange', function (data) {
-  		//broadcast(except current socket) to update players states
-  		socket.broadcast.emit('otherClientStateChange', { id:socket.id,state:data });
-  	});
+//update item position
+app.put('/items/:id/reposition/:new_position', controller.updateItemPosition);
 
-  	//disconnect
-  	socket.on('disconnect',function(){
-  		console.log(socket.id+' disconnect!');
-  		socket.broadcast.emit('newClientDisconnect', { id:socket.id,message: "one client disconnect!"});
-  	});
+//delete item position
+app.delete('/items/:id', controller.deleteItem);
 
-});
+
